@@ -35,11 +35,11 @@ type TransactItem struct {
 }
 
 // ConfigureDynamoDB : For creating dynamodb connection.
-func ConfigureDynamoDB() {
+func ConfigureDynamoDB(region string) {
 	Dyna = new(MyDynamo)
 
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(ConfigurationObj.AWS.Region)},
+		Region: aws.String(region)},
 	)
 	if err != nil {
 		fmt.Println("error in session creation: ", err)

@@ -95,24 +95,11 @@ func InterfaceToMap(request interface{}) map[string]interface{} {
 	return response
 }
 
-func removeEmptyFields(vehicleCreated VmsVehicle) []string {
-	var result []string
-	v := reflect.ValueOf(vehicleCreated)
 
-	typeOfS := v.Type()
-	numOfFields := v.NumField()
-	for i := 0; i < numOfFields; i++ {
-		if len(strings.TrimSpace(v.Field(i).String())) == 0 {
-			result = append(result, typeOfS.Field(i).Name)
-		}
-	}
-	return result
-}
-
-func getCall(url string, query_params map[string]string, header http.Header) ([]byte, error){
+func getCall(url string, query_params map[string]string, header http.Header, timeout time.Duration) ([]byte, error){
 	var endpointFms = appendQueryParams(url, query_params)
 	httpClient := http.Client{
-		Timeout: time.Second * ConfigurationObj.Server.TimeOut,
+		Timeout: time.Second * timeout,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, endpointFms, nil)
