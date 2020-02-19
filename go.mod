@@ -1,4 +1,4 @@
-module common
+module go-common-utility
 
 go 1.13
 
