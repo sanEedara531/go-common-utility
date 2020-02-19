@@ -1,3 +1,3 @@
-module github.com/delhivery/common
+module common
 
 go 1.13.5
