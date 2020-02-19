@@ -16,7 +16,7 @@ import (
 type utilityService struct {
 }
 
-func getUUID() string {
+func GetUUID() string {
 	uuid1, err := uuid.NewUUID()
 	if err != nil {
 		fmt.Println(err)
@@ -24,11 +24,11 @@ func getUUID() string {
 	return uuid1.String()
 }
 
-func getUTCTimeString() string {
+func GetUTCTimeString() string {
 	return time.Now().UTC().String()
 }
 
-func prepareUpdateExpression(request interface{}, keysToExclude []string) map[string]interface{} {
+func PrepareUpdateExpression(request interface{}, keysToExclude []string) map[string]interface{} {
 	var UpdateExpression string
 	response := make(map[string]interface{})
 	expressionAttributeValues := make(map[string]interface{})
@@ -38,11 +38,11 @@ func prepareUpdateExpression(request interface{}, keysToExclude []string) map[st
 	numOfFields := v.NumField()
 
 	for i := 0; i < numOfFields; i++ {
-		if !contains(keysToExclude, typeOfS.Field(i).Name) {
+		if !Contains(keysToExclude, typeOfS.Field(i).Name) {
 			var keyName = ":" + typeOfS.Field(i).Name
 			var data = v.Field(i).Interface()
 			expressionAttributeValues[keyName] = data
-			UpdateExpression = UpdateExpression + lowerFirst(typeOfS.Field(i).Name) + "= :" + typeOfS.Field(i).Name
+			UpdateExpression = UpdateExpression + LowerFirst(typeOfS.Field(i).Name) + "= :" + typeOfS.Field(i).Name
 
 			if i != numOfFields-1 {
 				UpdateExpression = UpdateExpression + ", "
@@ -55,7 +55,7 @@ func prepareUpdateExpression(request interface{}, keysToExclude []string) map[st
 	return response
 }
 
-func lowerFirst(s string) string {
+func LowerFirst(s string) string {
 	if s == "" {
 		return ""
 	}
@@ -63,7 +63,7 @@ func lowerFirst(s string) string {
 	return string(unicode.ToLower(r)) + s[n:]
 }
 
-func contains(arr []string, str string) bool {
+func Contains(arr []string, str string) bool {
 	for _, a := range arr {
 		if a == str {
 			return true
@@ -96,8 +96,8 @@ func InterfaceToMap(request interface{}) map[string]interface{} {
 }
 
 
-func getCall(url string, query_params map[string]string, header http.Header, timeout time.Duration) ([]byte, error){
-	var endpointFms = appendQueryParams(url, query_params)
+func GetCall(url string, query_params map[string]string, header http.Header, timeout time.Duration) ([]byte, error){
+	var endpointFms = AppendQueryParams(url, query_params)
 	httpClient := http.Client{
 		Timeout: time.Second * timeout,
 	}
@@ -123,7 +123,7 @@ func getCall(url string, query_params map[string]string, header http.Header, tim
 	return body, readErr
 }
 
-func appendQueryParams(url string, query_params map[string]string) string {
+func AppendQueryParams(url string, query_params map[string]string) string {
 	var result strings.Builder
 	result.WriteString(url + "?")
 
@@ -136,7 +136,7 @@ func appendQueryParams(url string, query_params map[string]string) string {
 	return resultString[:len(resultString)-1]
 }
 
-func isEmpty(str string) bool {
+func IsEmpty(str string) bool {
 	if len(str) > 0 && len(strings.TrimSpace(str)) > 0 {
 		return false
 	}
