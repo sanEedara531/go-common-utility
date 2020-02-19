@@ -2,8 +2,6 @@ package common
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"reflect"
 	"strings"
 	"time"
@@ -95,33 +93,6 @@ func InterfaceToMap(request interface{}) map[string]interface{} {
 	return response
 }
 
-
-func GetCall(url string, query_params map[string]string, header http.Header, timeout time.Duration) ([]byte, error){
-	var endpointFms = AppendQueryParams(url, query_params)
-	httpClient := http.Client{
-		Timeout: time.Second * timeout,
-	}
-
-	req, err := http.NewRequest(http.MethodGet, endpointFms, nil)
-	if err != nil {
-		ZapLoggerObj.Error("Unable to make request to endpoint " + endpointFms)
-		return nil, err
-	}
-	req.Header = header
-
-	res, getErr := httpClient.Do(req)
-	if getErr != nil {
-		ZapLoggerObj.Error("get request to endpoint failed " + endpointFms)
-		return nil, getErr
-	}
-
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		ZapLoggerObj.Error("unable to convert to an object " + endpointFms)
-		return nil, readErr
-	}
-	return body, readErr
-}
 
 func AppendQueryParams(url string, query_params map[string]string) string {
 	var result strings.Builder
